@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TradingBotConfiguration>
+    <Metadata>
+        <Name>Deriv Trading Assistant</Name>
+        <Version>1.0</Version>
+        <Description>Educational trading bot configuration with risk management</Description>
+        <Created>2024-01-01</Created>
+    </Metadata>
+    
+    <RiskManagement>
+        <MaxDailyLoss>2.0</MaxDailyLoss>
+        <MaxPositionSize>5.0</MaxPositionSize>
+        <DailyTradeLimit>10</DailyTradeLimit>
+        <StopLossPercentage>1.0</StopLossPercentage>
+        <TakeProfitPercentage>2.0</TakeProfitPercentage>
+        <RiskRewardRatio>1:2</RiskRewardRatio>
+    </RiskManagement>
+    
+    <TradingParameters>
+        <ContractTypes>
+            <Type>DIGITMATCH</Type>
+            <Type>DIGITDIFF</Type>
+            <Type>DIGITOVER</Type>
+            <Type>DIGITUNDER</Type>
+        </ContractTypes>
+        
+        <AnalysisMethods>
+            <Technical>RSI</Technical>
+            <Technical>MovingAverages</Technical>
+            <Technical>SupportResistance</Technical>
+            <MarketSentiment>Basic</MarketSentiment>
+        </AnalysisMethods>
+        
+        <TradingHours>
+            <Session>24/5</Session>
+            <BreakPeriod>00:00-00:30</BreakPeriod>
+        </TradingHours>
+    </TradingParameters>
+    
+    <AIConfiguration>
+        <ModelType>Ensemble</ModelType>
+        <Features>
+            <Feature>PriceAction</Feature>
+            <Feature>VolumeAnalysis</Feature>
+            <Feature>MarketVolatility</Feature>
+            <Feature>TimeBasedPatterns</Feature>
+        </Features>
+        <UpdateFrequency>Daily</UpdateFrequency>
+        <Backtesting>Enabled</Backtesting>
+    </AIConfiguration>
+    
+    <SafetyFeatures>
+        <EmergencyStop>Enabled</EmergencyStop>
+        <BalanceProtection>Enabled</BalanceProtection>
+        <MarketHolidayDetection>Enabled</MarketHolidayDetection>
+        <ConnectionMonitor>Enabled</ConnectionMonitor>
+    </SafetyFeatures>
+    
+    <Disclaimer>
+        <Warning>TRADING INVOLVES SIGNIFICANT RISK OF LOSS</Warning>
+        <Note>Past performance does not guarantee future results</Note>
+        <Accuracy>No trading system can guarantee consistent profits</Accuracy>
+        <Recommendation>Only trade with risk capital you can afford to lose</Recommendation>
+    </Disclaimer>
+</TradingBotConfiguration>
