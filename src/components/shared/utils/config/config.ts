@@ -81,13 +81,9 @@ export const getDefaultAppIdAndUrl = () => {
 
 export const getAppId = () => {
     const config_app_id = window.localStorage.getItem('config.app_id');
-    const deriv_app_id = process.env.DERIV_APP_ID;
 
     if (config_app_id) {
         return config_app_id;
-    }
-    if (deriv_app_id) {
-        return deriv_app_id;
     }
 
     const current_domain = getCurrentProductionDomain() ?? '';
@@ -99,7 +95,16 @@ export const getAppId = () => {
         return APP_IDS.LOCALHOST;
     }
 
-    return domain_app_ids[current_domain as keyof typeof domain_app_ids] ?? APP_IDS.PRODUCTION;
+    if (current_domain) {
+        return domain_app_ids[current_domain as keyof typeof domain_app_ids];
+    }
+
+    const deriv_app_id = process.env.DERIV_APP_ID;
+    if (deriv_app_id) {
+        return deriv_app_id;
+    }
+
+    return APP_IDS.PRODUCTION;
 };
 
 export const getSocketURL = () => {
