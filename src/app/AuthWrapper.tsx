@@ -103,12 +103,13 @@ export const AuthWrapper = () => {
     const { loginInfo, paramsToDelete } = URLUtils.getLoginInfoFromURL();
     const { isOnline } = useOfflineDetection();
 
-    // Set app_id from env for unknown domains (e.g. Vercel).
-    // Only use numeric app_ids — the Deriv WebSocket API rejects alphanumeric values
-    // (the OIDC client_id is alphanumeric and is NOT the same as the WS app_id).
+    // Set config.app_id from DERIV_APP_ID env var for unknown domains (e.g. Vercel).
+    // This value is used by @deriv-com/auth-client as the OIDC client_id (may be alphanumeric).
+    // Our custom getAppId() in config.ts does NOT read this key — it uses its own logic
+    // to return a numeric app_id for the Deriv WebSocket API.
     React.useEffect(() => {
         const app_id = process.env.DERIV_APP_ID;
-        if (app_id && /^\d+$/.test(app_id) && !localStorage.getItem('config.app_id')) {
+        if (app_id && !localStorage.getItem('config.app_id')) {
             localStorage.setItem('config.app_id', app_id);
         }
     }, []);

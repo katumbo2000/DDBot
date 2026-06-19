@@ -80,31 +80,32 @@ export const getDefaultAppIdAndUrl = () => {
 };
 
 export const getAppId = () => {
-    const config_app_id = window.localStorage.getItem('config.app_id');
-
-    if (config_app_id) {
-        return config_app_id;
+    // config.app_id is reserved for @deriv-com/auth-client OIDC client_id (may be alphanumeric).
+    // For WebSocket connections we always need a numeric app_id. Check config.ws_app_id for QA overrides.
+    const ws_app_id = window.localStorage.getItem('config.ws_app_id');
+    if (ws_app_id) {
+        return ws_app_id;
     }
 
     const current_domain = getCurrentProductionDomain() ?? '';
 
     if (isStaging()) {
-        return APP_IDS.STAGING;
+        return String(APP_IDS.STAGING);
     }
     if (isTestLink()) {
-        return APP_IDS.LOCALHOST;
+        return String(APP_IDS.LOCALHOST);
     }
 
     if (current_domain) {
-        return domain_app_ids[current_domain as keyof typeof domain_app_ids];
+        return String(domain_app_ids[current_domain as keyof typeof domain_app_ids]);
     }
 
     const deriv_app_id = process.env.DERIV_APP_ID;
-    if (deriv_app_id) {
+    if (deriv_app_id && /^\d+$/.test(deriv_app_id)) {
         return deriv_app_id;
     }
 
-    return APP_IDS.PRODUCTION;
+    return String(APP_IDS.PRODUCTION);
 };
 
 export const getSocketURL = () => {
@@ -129,6 +130,7 @@ export const checkAndSetEndpointFromUrl = () => {
 
             if (/^(^(www\.)?qa[0-9]{1,4}\.deriv.dev|(.*)\.derivws\.com)$/.test(qa_server) && /^[0-9]+$/.test(app_id)) {
                 localStorage.setItem('config.app_id', app_id);
+                localStorage.setItem('config.ws_app_id', app_id);
                 localStorage.setItem('config.server_url', qa_server.replace(/"/g, ''));
             }
 
