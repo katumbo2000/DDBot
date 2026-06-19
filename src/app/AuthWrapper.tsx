@@ -103,6 +103,14 @@ export const AuthWrapper = () => {
     const { loginInfo, paramsToDelete } = URLUtils.getLoginInfoFromURL();
     const { isOnline } = useOfflineDetection();
 
+    // Set app_id from env for unknown domains (e.g. Vercel)
+    React.useEffect(() => {
+        const app_id = process.env.DERIV_APP_ID;
+        if (app_id && !localStorage.getItem('config.app_id')) {
+            localStorage.setItem('config.app_id', app_id);
+        }
+    }, []);
+
     React.useEffect(() => {
         const initializeAuth = async () => {
             try {

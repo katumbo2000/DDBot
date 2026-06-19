@@ -41,6 +41,8 @@ export default defineConfig({
                 RUDDERSTACK_KEY: JSON.stringify(process.env.RUDDERSTACK_KEY),
                 GROWTHBOOK_CLIENT_KEY: JSON.stringify(process.env.GROWTHBOOK_CLIENT_KEY),
                 GROWTHBOOK_DECRYPTION_KEY: JSON.stringify(process.env.GROWTHBOOK_DECRYPTION_KEY),
+                DERIV_APP_ID: JSON.stringify(process.env.DERIV_APP_ID),
+                DERIV_API_TOKEN: JSON.stringify(process.env.DERIV_API_TOKEN),
             },
         },
         alias: {

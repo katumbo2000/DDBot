@@ -38,6 +38,7 @@ export const isTestLink = () => {
     return (
         window.location.origin?.includes('.binary.sx') ||
         window.location.origin?.includes('bot-65f.pages.dev') ||
+        window.location.origin?.includes('.vercel.app') ||
         isLocal()
     );
 };
@@ -79,21 +80,26 @@ export const getDefaultAppIdAndUrl = () => {
 };
 
 export const getAppId = () => {
-    let app_id = null;
     const config_app_id = window.localStorage.getItem('config.app_id');
-    const current_domain = getCurrentProductionDomain() ?? '';
+    const deriv_app_id = process.env.DERIV_APP_ID;
 
     if (config_app_id) {
-        app_id = config_app_id;
-    } else if (isStaging()) {
-        app_id = APP_IDS.STAGING;
-    } else if (isTestLink()) {
-        app_id = APP_IDS.LOCALHOST;
-    } else {
-        app_id = domain_app_ids[current_domain as keyof typeof domain_app_ids] ?? APP_IDS.PRODUCTION;
+        return config_app_id;
+    }
+    if (deriv_app_id) {
+        return deriv_app_id;
     }
 
-    return app_id;
+    const current_domain = getCurrentProductionDomain() ?? '';
+
+    if (isStaging()) {
+        return APP_IDS.STAGING;
+    }
+    if (isTestLink()) {
+        return APP_IDS.LOCALHOST;
+    }
+
+    return domain_app_ids[current_domain as keyof typeof domain_app_ids] ?? APP_IDS.PRODUCTION;
 };
 
 export const getSocketURL = () => {
