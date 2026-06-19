@@ -82,6 +82,17 @@ const AppContent = observer(() => {
         }
     }, [common, connectionStatus, offline_timeout]);
 
+    // Connection timeout — if WS never opens (bad app_id, etc.), proceed without it
+    useEffect(() => {
+        if (connectionStatus !== CONNECTION_STATUS.OPENED && !is_api_initialized) {
+            const timeout = setTimeout(() => {
+                console.log('[Connection] Connection timeout reached, proceeding without WS');
+                setIsApiInitialized(true);
+            }, 8000);
+            return () => clearTimeout(timeout);
+        }
+    }, [connectionStatus, is_api_initialized]);
+
     // Handle offline scenarios - don't wait indefinitely for API
     useEffect(() => {
         if (!isOnline && is_loading) {
