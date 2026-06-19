@@ -13,6 +13,7 @@ import LoadModalStore from './load-modal-store';
 import QuickStrategyStore from './quick-strategy-store';
 import RunPanelStore from './run-panel-store';
 import SaveModalStore from './save-modal-store';
+import ScannerStore from './scanner-store';
 import SelfExclusionStore from './self-exclusion-store';
 import SummaryCardStore from './summary-card-store';
 import ToolbarStore from './toolbar-store';
@@ -38,6 +39,7 @@ export default class RootStore {
     public quick_strategy: QuickStrategyStore;
     public self_exclusion: SelfExclusionStore;
     public dashboard: DashboardStore;
+    public scanner: ScannerStore;
 
     public chart_store: ChartStore;
     public blockly_store: BlocklyStore;
@@ -79,6 +81,7 @@ export default class RootStore {
         this.quick_strategy = new QuickStrategyStore(this);
         this.self_exclusion = new SelfExclusionStore(this, this.core);
         this.dashboard = new DashboardStore(this, this.core);
+        this.scanner = new ScannerStore(this);
 
         // need to be at last for dependency
         this.chart_store = new ChartStore(this);

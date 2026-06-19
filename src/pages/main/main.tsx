@@ -19,11 +19,12 @@ import { useStore } from '@/hooks/useStore';
 import useTMB from '@/hooks/useTMB';
 import { handleOidcAuthFailure } from '@/utils/auth-utils';
 import {
+    LabelPairedBellCaptionRegularIcon,
     LabelPairedChartLineCaptionRegularIcon,
     LabelPairedObjectsColumnCaptionRegularIcon,
     LabelPairedPuzzlePieceTwoCaptionBoldIcon,
 } from '@deriv/quill-icons/LabelPaired';
-import { LegacyGuide1pxIcon } from '@deriv/quill-icons/Legacy';
+import { LegacyGuide1pxIcon, LegacyIndicatorsIcon } from '@deriv/quill-icons/Legacy';
 import { requestOidcAuthentication } from '@deriv-com/auth-client';
 import { Localize, localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
@@ -37,6 +38,8 @@ const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
 const FreeBots = lazy(() => import('../free-bots'));
 const AnalysisTool = lazy(() => import('../analysis-tool'));
+const TradingHub = lazy(() => import('../scanner'));
+const SignalScanner = lazy(() => import('../signal-scanner'));
 
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
@@ -68,7 +71,16 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'free_bots', 'analysis_tool'];
+    const hash = [
+        'dashboard',
+        'bot_builder',
+        'chart',
+        'tutorial',
+        'free_bots',
+        'trading_hub',
+        'signal_scanner',
+        'analysis_tool',
+    ];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -372,6 +384,48 @@ const AppWrapper = observer(() => {
                                         }
                                     >
                                         <FreeBots />
+                                    </Suspense>
+                                </div>
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LegacyIndicatorsIcon height='24px' width='24px' fill='var(--text-general)' />
+                                        <Localize i18n_default_text='Trading Hub' />
+                                    </>
+                                }
+                                id='id-trading-hub'
+                            >
+                                <div className='trading-hub-wrapper'>
+                                    <Suspense
+                                        fallback={
+                                            <ChunkLoader message={localize('Please wait, loading trading hub...')} />
+                                        }
+                                    >
+                                        <TradingHub />
+                                    </Suspense>
+                                </div>
+                            </div>
+                            <div
+                                label={
+                                    <>
+                                        <LabelPairedBellCaptionRegularIcon
+                                            height='24px'
+                                            width='24px'
+                                            fill='var(--text-general)'
+                                        />
+                                        <Localize i18n_default_text='Signal Scanner' />
+                                    </>
+                                }
+                                id='id-signal-scanner'
+                            >
+                                <div className='signal-scanner-wrapper'>
+                                    <Suspense
+                                        fallback={
+                                            <ChunkLoader message={localize('Please wait, loading signal scanner...')} />
+                                        }
+                                    >
+                                        <SignalScanner />
                                     </Suspense>
                                 </div>
                             </div>

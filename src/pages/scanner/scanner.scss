@@ -1,0 +1,218 @@
+.scanner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 2.4rem;
+    overflow-y: auto;
+
+    &__header {
+        margin-bottom: 2.4rem;
+    }
+
+    &__title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-general);
+        margin: 0 0 0.4rem;
+    }
+
+    &__description {
+        font-size: 1.2rem;
+        color: var(--text-less-prominent);
+        margin: 0;
+    }
+
+    &__login-prompt {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        font-size: 1.4rem;
+        color: var(--text-less-prominent);
+    }
+
+    &__controls {
+        display: flex;
+        gap: 2.4rem;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 2.4rem;
+        padding: 1.6rem;
+        background: var(--general-main-1);
+        border-radius: 0.8rem;
+        border: 1px solid var(--border-divider);
+    }
+
+    &__panel {
+        min-width: 200px;
+    }
+
+    &__panel-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-prominent);
+        margin: 0 0 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    &__checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    &__checkbox {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        font-size: 1.2rem;
+        color: var(--text-general);
+        cursor: pointer;
+        padding: 0.4rem 0;
+
+        input[type='checkbox'] {
+            cursor: pointer;
+            accent-color: var(--brand-red-coral);
+        }
+
+        &:has(input:disabled) {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        padding-top: 2.4rem;
+    }
+
+    &__btn {
+        padding: 0.8rem 2.4rem;
+        border-radius: 0.4rem;
+        border: none;
+        font-size: 1.2rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+
+        &--start {
+            background: var(--brand-red-coral);
+            color: var(--text-colored-background);
+        }
+
+        &--stop {
+            background: var(--button-tertiary-default);
+            color: var(--text-general);
+            border: 1px solid var(--border-divider);
+        }
+
+        &:hover {
+            opacity: 0.8;
+        }
+    }
+
+    &__results {
+        flex: 1;
+        overflow-x: auto;
+    }
+
+    &__table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.2rem;
+
+        th {
+            text-align: left;
+            padding: 1rem 1.2rem;
+            background: var(--general-section-1);
+            color: var(--text-less-prominent);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid var(--border-divider);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border-divider);
+            color: var(--text-general);
+            vertical-align: middle;
+        }
+
+        tbody tr:hover {
+            background: var(--general-hover);
+        }
+    }
+
+    &__market-name {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    &__status {
+        display: inline-block;
+        padding: 0.2rem 0.8rem;
+        border-radius: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+
+        &--active {
+            background: rgb(17 204 85 / 15%);
+            color: #1c5;
+        }
+
+        &--connecting {
+            background: rgb(255 183 77 / 15%);
+            color: #ffb74d;
+        }
+
+        &--unavailable {
+            background: rgb(255 82 82 / 15%);
+            color: #ff5252;
+        }
+
+        &--stopped,
+        &--idle {
+            background: rgb(158 158 158 / 15%);
+            color: #9e9e9e;
+        }
+    }
+
+    &__signal {
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+
+        &--bullish .scanner__signal-label {
+            color: #1c5;
+        }
+
+        &--bearish .scanner__signal-label {
+            color: #ff5252;
+        }
+
+        &--neutral .scanner__signal-label {
+            color: #9e9e9e;
+        }
+    }
+
+    &__signal-label {
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    &__signal-confidence {
+        font-size: 1rem;
+        color: var(--text-less-prominent);
+    }
+
+    &__signal-detail {
+        font-size: 0.9rem;
+        color: var(--text-less-prominent);
+        font-style: italic;
+    }
+}
