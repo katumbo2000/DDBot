@@ -6,7 +6,7 @@ import { observer as globalObserver } from '@/external/bot-skeleton/utils/observ
 import { useOfflineDetection } from '@/hooks/useOfflineDetection';
 import { clearAuthData } from '@/utils/auth-utils';
 import { localize } from '@deriv-com/translations';
-import { URLUtils } from '@deriv-com/utils';
+import { URLUtils, LocalStorageUtils, LocalStorageConstants } from '@deriv-com/utils';
 import App from './App';
 
 // Extend Window interface to include is_tmb_enabled property
@@ -109,8 +109,8 @@ export const AuthWrapper = () => {
     // to return a numeric app_id for the Deriv WebSocket API.
     React.useEffect(() => {
         const app_id = process.env.DERIV_APP_ID;
-        if (app_id && !localStorage.getItem('config.app_id')) {
-            localStorage.setItem('config.app_id', app_id);
+        if (app_id && !LocalStorageUtils.getValue(LocalStorageConstants.configAppId)) {
+            LocalStorageUtils.setValue(LocalStorageConstants.configAppId, app_id);
         }
     }, []);
 
