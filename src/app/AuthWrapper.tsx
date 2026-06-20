@@ -56,6 +56,29 @@ declare global {
         }
         return origSet.call(this, name, value);
     };
+    // Redirect legacy token exchange through our API proxy to avoid CORS
+    const origFetch = window.fetch.bind(window);
+    window.fetch = (url, options) => {
+        const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : url?.url || '';
+        // OIDC well-known config: redirect to auth.deriv.com
+        if (urlStr.includes('/.well-known/openid-configuration')) {
+            return origFetch(urlStr.replace('oauth.deriv.com', 'auth.deriv.com'), options)
+                .then(async response => {
+                    const config = await response.clone().json();
+                    config.issuer = config.issuer.replace('auth.deriv.com', 'oauth.deriv.com');
+                    return new Response(JSON.stringify(config), {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+                });
+        }
+        // Legacy token exchange: proxy through our API to avoid CORS
+        if (urlStr.includes('/oauth2/legacy/tokens')) {
+            return origFetch(urlStr.replace('https://oauth.deriv.com/oauth2/legacy/tokens', '/api/legacy-tokens'), options);
+        }
+        return origFetch(url, options);
+    };
 })();
 
 const setLocalStorageToken = async (

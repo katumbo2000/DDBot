@@ -1,7 +1,16 @@
 {
     "outputDirectory": "dist",
     "buildCommand": "npm run build",
+    "functions": {
+        "api/*.js": {
+            "runtime": "@vercel/node@4"
+        }
+    },
     "rewrites": [
+        {
+            "source": "/api/(.*)",
+            "destination": "/api/$1"
+        },
         {
             "source": "/(.*)",
             "destination": "/index.html"
