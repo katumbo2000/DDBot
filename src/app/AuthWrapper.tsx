@@ -37,6 +37,25 @@ declare global {
         }
         return originalFetch(url, options);
     };
+    // Strip 'openid' from scope parameters — client is registered as OAuth 2.0, not OIDC
+    const origAppend = URLSearchParams.prototype.append;
+    const origSet = URLSearchParams.prototype.set;
+    URLSearchParams.prototype.append = function (name, value) {
+        if (name === 'scope') {
+            const filtered = value.split(' ').filter(s => s !== 'openid').join(' ');
+            if (filtered) return origAppend.call(this, name, filtered);
+            return;
+        }
+        return origAppend.call(this, name, value);
+    };
+    URLSearchParams.prototype.set = function (name, value) {
+        if (name === 'scope') {
+            const filtered = value.split(' ').filter(s => s !== 'openid').join(' ');
+            if (filtered) return origSet.call(this, name, filtered);
+            return;
+        }
+        return origSet.call(this, name, value);
+    };
 })();
 
 const setLocalStorageToken = async (
