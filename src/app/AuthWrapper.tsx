@@ -16,6 +16,29 @@ declare global {
     }
 }
 
+// Intercept OIDC well-known config fetches to redirect from oauth.deriv.com
+// to auth.deriv.com, where new developer portal apps (alphanumeric client_ids) live.
+(() => {
+    if (typeof window === 'undefined') return;
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = (url, options) => {
+        const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : url?.url || '';
+        if (urlStr.includes('/.well-known/openid-configuration')) {
+            return originalFetch(urlStr.replace('oauth.deriv.com', 'auth.deriv.com'), options)
+                .then(async response => {
+                    const config = await response.clone().json();
+                    config.issuer = config.issuer.replace('auth.deriv.com', 'oauth.deriv.com');
+                    return new Response(JSON.stringify(config), {
+                        status: response.status,
+                        statusText: response.statusText,
+                        headers: { 'Content-Type': 'application/json' },
+                    });
+                });
+        }
+        return originalFetch(url, options);
+    };
+})();
+
 const setLocalStorageToken = async (
     loginInfo: URLUtils.LoginInfo[],
     paramsToDelete: string[],
@@ -111,20 +134,6 @@ export const AuthWrapper = () => {
         const app_id = process.env.DERIV_APP_ID;
         if (app_id && !LocalStorageUtils.getValue(LocalStorageConstants.configAppId)) {
             LocalStorageUtils.setValue(LocalStorageConstants.configAppId, app_id);
-        }
-
-        // @deriv-com/auth-client hardcodes oauth.deriv.com as the OIDC provider,
-        // but new developer portal apps (alphanumeric client_ids) live on auth.deriv.com.
-        // Pre-fetch the correct OIDC config and cache it so the auth-client uses it.
-        const existing = localStorage.getItem('config.oidc_endpoints');
-        if (!existing) {
-            fetch('https://auth.deriv.com/.well-known/openid-configuration')
-                .then(r => r.json())
-                .then(config => {
-                    config.issuer = 'https://oauth.deriv.com';
-                    localStorage.setItem('config.oidc_endpoints', JSON.stringify(config));
-                })
-                .catch(() => {});
         }
     }, []);
 
