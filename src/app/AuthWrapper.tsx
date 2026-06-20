@@ -112,6 +112,20 @@ export const AuthWrapper = () => {
         if (app_id && !LocalStorageUtils.getValue(LocalStorageConstants.configAppId)) {
             LocalStorageUtils.setValue(LocalStorageConstants.configAppId, app_id);
         }
+
+        // @deriv-com/auth-client hardcodes oauth.deriv.com as the OIDC provider,
+        // but new developer portal apps (alphanumeric client_ids) live on auth.deriv.com.
+        // Pre-fetch the correct OIDC config and cache it so the auth-client uses it.
+        const existing = localStorage.getItem('config.oidc_endpoints');
+        if (!existing) {
+            fetch('https://auth.deriv.com/.well-known/openid-configuration')
+                .then(r => r.json())
+                .then(config => {
+                    config.issuer = 'https://oauth.deriv.com';
+                    localStorage.setItem('config.oidc_endpoints', JSON.stringify(config));
+                })
+                .catch(() => {});
+        }
     }, []);
 
     React.useEffect(() => {
