@@ -35,6 +35,9 @@ const CallbackPage = () => {
 
     return (
         <Callback
+            onSignInError={(error: unknown) => {
+                console.error('[Callback] Sign-in error:', error);
+            }}
             onSignInSuccess={async (tokens: Record<string, string>, rawState: unknown) => {
                 try {
                     const state = rawState as { account?: string } | null;
